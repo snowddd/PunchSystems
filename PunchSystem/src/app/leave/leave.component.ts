@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FactoryService } from '../services/factory.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-leave',
   templateUrl: './leave.component.html',
@@ -12,10 +13,12 @@ export class LeaveComponent implements OnInit {
   leaveDate:string;
   leaveType;
   data;
+  leavejson;
 
-  constructor(private factory:FactoryService) { }
+  constructor(private router: Router,private factory:FactoryService) { }
 
   ngOnInit() {
+    this.leaveRecords();
   }
 
   leave(){
@@ -25,15 +28,40 @@ export class LeaveComponent implements OnInit {
       (res) => {
       // console.log(res);
       if(res.returnCode === '0000'){
-      alert('請假成功');
+        this.leaveRecords();
+        alert('leave Success');
 
       }else {
-        alert('請假失敗 請確認當天是否已經請假');
+        alert('leave fail , Check your date choose');
       }
       }, (err) => {
         console.log(err);
-        alert('系統出現錯誤');
+        alert('Systems error');
       });
   
   }
+
+  leaveRecords(){
+    this.data = {"id":this.factory.id}
+    this.factory.sendRequest('leaveRecords',this.data).subscribe(
+      (res) => {
+      console.log(res);
+      if(res.returnCode === '0000'){
+      this.leavejson = res.return;
+      }else {
+        alert('Systems error');
+      }
+      }, (err) => {
+        console.log(err);
+        alert('Systems error');
+      });
+
+  }
+
+  goProfile(){
+    this.router.navigateByUrl('member');
+
+  }
+
+
 }

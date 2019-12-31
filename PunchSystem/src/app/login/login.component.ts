@@ -29,11 +29,11 @@ export class LoginComponent implements OnInit {
         this.router.navigateByUrl('member');
 
       }else {
-        alert('登入失敗');
+        alert('Login fail');
       }
       }, (err) => {
         console.log(err);
-        alert('系統出現錯誤');
+        alert('Systems error');
       });
   
   

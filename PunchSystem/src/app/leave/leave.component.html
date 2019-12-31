@@ -1,3 +1,18 @@
+<p style="text-align:center; font-size: 20px;"> Recent 50 punch records</p>
+
+
+
+<table border=4 align=center width=40% bgcolor=white cellspacing=5 cellpadding=6 >
+    <tr>
+    <td align=center>Vaction</td>
+    <td align=center>VacationDate</td>
+    </tr>
+    <tr *ngFor="let lea of leavejson">
+    <td align=center>{{lea?.Vacation}}</td>
+    <td >{{lea?.VacationDate}}</td>
+    </tr>
+    </table>
+    <br>
 <form align=center>
     <div>
       <label for="party">Choose your leave date:</label>
@@ -12,6 +27,13 @@
         <option value=4>Annual Leave</option>
 </select>    
         </div>
+        <div>
+        <br>
         <button (click)="leave()">submit</button>
+        <br>
+        <br>
+        <button (click)="goProfile()">Back</button>
+        </div>
+
   </form>
 

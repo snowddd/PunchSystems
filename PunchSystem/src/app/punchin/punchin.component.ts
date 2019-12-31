@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FactoryService } from '../services/factory.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-punchin',
   templateUrl: './punchin.component.html',
@@ -7,9 +8,10 @@ import { FactoryService } from '../services/factory.service';
 })
 export class PunchinComponent implements OnInit {
 
-  constructor(private factory:FactoryService) { }
+  constructor(private router: Router,private factory:FactoryService) { }
 
   ngOnInit() {
+    this.punchRecords();
   }
 
 punchjson ;
@@ -27,21 +29,43 @@ punchjson ;
       this.data = {"id":this.factory.id}
       this.factory.sendRequest('punch',this.data).subscribe(
         (res) => {
-        // console.log(res);
+        console.log(res);
         if(res.returnCode === '0000'){
-        this.punchjson = res.return;
-        alert('簽到、簽退成功');
+        // this.punchjson = res.return;
+        this.punchRecords();
+        alert('Punch success');
         }else {
-          alert('請確定當天是否已經簽退過');
+          alert('Check your this day Punch records');
         }
         }, (err) => {
           console.log(err);
-          alert('系統出現錯誤');
+          alert('Systems error');
+        });
+
+    }
+
+    
+    punchRecords(){
+      this.data = {"id":this.factory.id}
+      this.factory.sendRequest('punchRecords',this.data).subscribe(
+        (res) => {
+        console.log(res);
+        if(res.returnCode === '0000'){
+        this.punchjson = res.return;
+        }else {
+          alert('Systems error');
+        }
+        }, (err) => {
+          console.log(err);
+          alert('Systems error');
         });
 
     }
 
 
-
+    goProfile(){
+      this.router.navigateByUrl('member');
+  
+    }
 
 }

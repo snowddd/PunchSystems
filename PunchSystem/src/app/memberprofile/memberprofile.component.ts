@@ -44,11 +44,11 @@ this.profile();
       this.department = this.employee.department;
 
       }else {
-        alert('獲取用戶資訊失敗');
+        alert('Get user profile fail');
       }
       }, (err) => {
         console.log(err);
-        alert('系統出現錯誤');
+        alert('Systems error');
       });
   
   

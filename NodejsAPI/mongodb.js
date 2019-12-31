@@ -9,15 +9,15 @@ const assert = require('assert');
 
 
 // leaveData mongo~
-MongoClient.connect(url, function(err, client) {
-  assert.equal(null, err);
-  console.log("Connected successfully to server");
-  const db = client.db(dbName);
-  db.createCollection('leave',function(err,collection){
-  if (err) throw err;
-  client.close(); //close mongodb
-  });
-});
+// MongoClient.connect(url, function(err, client) {
+//   assert.equal(null, err);
+//   console.log("Connected successfully to server");
+//   const db = client.db(dbName);
+//   db.createCollection('leave',function(err,collection){
+//   if (err) throw err;
+//   client.close(); //close mongodb
+//   });
+// });
 
 
 // punchData mongo~

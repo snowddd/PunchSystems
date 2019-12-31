@@ -1,4 +1,4 @@
-# Easy front-end
+# Easy Front-End
 
 # PunchSystem
 

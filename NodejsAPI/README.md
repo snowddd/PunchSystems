@@ -2,8 +2,10 @@
 
 Try use Node.js & mongoDB to achieve CRUD Project , simulation a Punch Systems situation .
 
-## 1. You should install Mongodb in your server
+## 1. You should install Mongodb in your server and have Node.js
 
-## 2. Node mongodb.js to create your testDB
+## 2. npm install
 
-## 3. Node server.js to create your API server in port 5001
+## 3. Node mongodb.js to create your testDB
+
+## 4. Node server.js to create your API server in port 5001

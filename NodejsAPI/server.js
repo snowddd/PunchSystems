@@ -71,7 +71,7 @@ return 'Annual Leave';
 // Connection URL
 const url = 'mongodb://localhost:27017';
 // Database Name
-const dbName = 'myproject';
+const dbName = 'PunchSystems';
 
 var app = express();
 app.use(cors(corsOptions));

@@ -13,6 +13,11 @@ punchReturnCode = {
   "return": ""
 }
 
+leaveReturnCode = {
+  "returnCode": "0000",
+  "return": ""
+}
+
 
 
 errorCode = {
@@ -294,7 +299,52 @@ app.post('/leave', function (req, res, next) {
 });
 
 
+// recent 15 leave records
+app.post('/leaveRecords', function (req, res, next) {
+  console.log('POST ' + apiDomain + '/leaveRecords');
+  console.log(req);
+  MongoClient.connect(url, function (err, client) {
+    assert.equal(null, err);
+    console.log("Connected successfully to server");
+    const db = client.db(dbName);
+    db.collection("leave", function (err, collection) {
+      collection.find({ id: parseInt(req.body.id) }).toArray(function (err, items) {
+        if (err) throw err;
+        console.log(items[0]);
+        console.log("We found " + items.length + " results!");
+        if (!items.length == 0) {
+        const recent50Array = [];
+          if(items.length<15)
+          {
+            for(i=0;i<items.length;i++)
+            {
+            recent50Array.push(items[i]);
+            }
+          }
+          else if (items.length>15)
+          {
+            for(i=0;i<15;i++)
+            {
+            recent50Array.push(items[i]);
+            }
+          }
+          leaveReturnCode.return = recent50Array;
+          // trans date
+          for(i=0;i<leaveReturnCode.return.length;i++){
+            leaveReturnCode.return[i].CheckTime = leaveReturnCode.return[i].CheckTime + '';
+        }
+          console.log(leaveReturnCode.return.CheckTime);
+          res.json(leaveReturnCode);
+        } else {
+          res.json(errorCode);
+        }
+      });
 
+    });
+    client.close();
+  });
+
+});
 
 
 
@@ -306,4 +356,4 @@ app.listen(5001); //dedault port
 
 
 
-console.log('Node.js web server at port 5000 is running..')
+console.log('Node.js web server at port 5001 is running..')

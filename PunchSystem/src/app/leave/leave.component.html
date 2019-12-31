@@ -1,0 +1,17 @@
+<form align=center>
+    <div>
+      <label for="party">Choose your leave date:</label>
+      <input type="date" id="party" name="party" min='{{min}}' max='{{max}}' [(ngModel)]="leaveDate">
+    </div>
+    <div>
+        <select class="leave" [(ngModel)]="leaveType" name="leave">
+        <option value=0>Leave for Statutory Reasons</option>
+        <option value=1>Personal Leave</option>
+        <option value=2>Sick Leave</option>
+        <option value=3>Marital Leave</option>
+        <option value=4>Annual Leave</option>
+</select>    
+        </div>
+        <button (click)="leave()">submit</button>
+  </form>
+

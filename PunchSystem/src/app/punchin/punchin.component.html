@@ -1,0 +1,18 @@
+<p style="text-align:center; font-size: 20px;"> Recent 50 punch records</p>
+
+
+
+<table border=4 align=center width=40% bgcolor=white cellspacing=5 cellpadding=6 >
+    <tr>
+    <td align=center>PunchStatus</td>
+    <td align=center>PunchTime</td>
+    </tr>
+    <tr *ngFor="let pun of punchjson">
+    <td align=center>{{punchType(pun?.CheckStatus)}}</td>
+    <td >{{pun?.CheckTime}}</td>
+    </tr>
+    </table>
+    <br>
+    <div style="text-align:center;">
+    <button (click)="punch()">Punch</button>
+    </div>

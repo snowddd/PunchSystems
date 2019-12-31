@@ -1,0 +1,48 @@
+
+<p style="text-align: center; font-size:25px">QRSTORE Attendance system</p>
+<p style="text-align: center; font-size:25px">{{name}} Profile</p>
+
+<table border=4 align=center width=20% bgcolor=white cellspacing=5 cellpadding=6>
+    <tr>
+        <td>EmployeeId</td>
+        <td>{{id}}</td>
+    </tr>
+
+    <tr>
+        <td>Name</td>
+        <td>{{name}}</td>
+    </tr>
+
+    <tr>
+        <td>Sex</td>
+        <td>{{sex==='1' ? 'Male' : 'Female' }}</td>
+    </tr>
+    
+    <tr>
+        <td>PersonId</td>
+        <td>{{personId}}</td>
+    </tr>
+
+    <tr>
+        <td>BirthDate</td>
+        <td>{{birthDate}}</td>
+    </tr>
+    <tr>
+        <td>Phone</td>
+        <td>{{phone}}</td>
+    </tr>
+    <tr>
+        <td>Position</td>
+        <td>{{position}}</td>
+    </tr>
+    <tr>
+        <td>Department</td>
+        <td>{{department}}</td>
+    </tr>
+    <tr style = "text-align: center;">
+        <td><button (click)="goPunch()" >punch</button></td>
+        <td><button (click)="goLeave()">leave</button></td>
+    </tr>
+
+</table>
+

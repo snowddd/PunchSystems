@@ -36,7 +36,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-const fs = require('fs');
 
 
 //UTC+8

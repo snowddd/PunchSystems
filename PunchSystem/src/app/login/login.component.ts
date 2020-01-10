@@ -1,4 +1,4 @@
-import { Component, OnInit ,Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { FactoryService } from '../services/factory.service';
 
@@ -9,34 +9,36 @@ import { FactoryService } from '../services/factory.service';
 })
 export class LoginComponent implements OnInit {
 
-  data:any ;
-  account:string;
-  password:string;
-  id:string;
+  data: any;
+  account: string;
+  password: string;
+  id: string;
 
-  constructor(private router: Router,private factory:FactoryService) { }
+  constructor(private router: Router, private factory: FactoryService) { }
 
   ngOnInit() {
+    if (localStorage.getItem('id')) {
+      this.router.navigateByUrl('member');
+    }
   }
 
   login() {
-    this.data = {"account":this.account,"password":this.password}
-    this.factory.sendRequest('login',this.data).subscribe(
+    this.data = { "account": this.account, "password": this.password }
+    this.factory.sendRequest('login', this.data).subscribe(
       (res) => {
-      // console.log(res);
-      if(res.returnCode === '0000'){
-        this.factory.id = res.id;
-        this.router.navigateByUrl('member');
+        if (res.returnCode === '0000') {
+          localStorage.setItem('id', `${res.id}`);
+          this.router.navigateByUrl('member');
 
-      }else {
-        alert('Login fail');
-      }
+        } else {
+          alert('Login fail');
+        }
       }, (err) => {
         console.log(err);
         alert('Systems error');
       });
-  
-  
+
+
 
   }
 

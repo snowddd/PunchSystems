@@ -2,38 +2,45 @@
 
 
 
-<table border=4 align=center width=40% bgcolor=white cellspacing=5 cellpadding=6 >
-    <tr>
+<table border=4 align=center width=40% bgcolor=white cellspacing=5 cellpadding=6 *ngIf="leavejsoncheck">
+  <tr>
     <td align=center>Vaction</td>
     <td align=center>VacationDate</td>
-    </tr>
-    <tr *ngFor="let lea of leavejson">
+  </tr>
+  <tr *ngFor="let lea of leavejson">
     <td align=center>{{lea?.Vacation}}</td>
-    <td >{{lea?.VacationDate}}</td>
-    </tr>
-    </table>
-    <br>
+    <td>{{lea?.VacationDate}}</td>
+  </tr>
+</table>
+
+<table border=4 align=center width=40% bgcolor=white cellspacing=5 cellpadding=6 *ngIf="!leavejsoncheck">
+  <tr>
+    <td align=center>Vaction</td>
+    <td align=center>VacationDate</td>
+  </tr>
+</table>
+
+<br>
 <form align=center>
-    <div>
-      <label for="party">Choose your leave date:</label>
-      <input type="date" id="party" name="party" min='{{min}}' max='{{max}}' [(ngModel)]="leaveDate">
-    </div>
-    <div>
-        <select class="leave" [(ngModel)]="leaveType" name="leave">
-        <option value=0>Leave for Statutory Reasons</option>
-        <option value=1>Personal Leave</option>
-        <option value=2>Sick Leave</option>
-        <option value=3>Marital Leave</option>
-        <option value=4>Annual Leave</option>
-</select>    
-        </div>
-        <div>
-        <br>
-        <button (click)="leave()">submit</button>
-        <br>
-        <br>
-        <button (click)="goProfile()">Back</button>
-        </div>
+  <div>
+    <label for="party">Choose your leave date:</label>
+    <input type="date" id="party" name="party" min='{{min}}' max='{{max}}' [(ngModel)]="leaveDate">
+  </div>
+  <div>
+    <select class="leave" [(ngModel)]="leaveType" name="leave">
+      <option value=0>Leave for Statutory Reasons</option>
+      <option value=1>Personal Leave</option>
+      <option value=2>Sick Leave</option>
+      <option value=3>Marital Leave</option>
+      <option value=4>Annual Leave</option>
+    </select>
+  </div>
+  <div>
+    <br>
+    <button (click)="leave()">submit</button>
+    <br>
+    <br>
+    <button (click)="goProfile()">Back</button>
+  </div>
 
-  </form>
-
+</form>

@@ -2,21 +2,29 @@
 
 
 
-<table border=4 align=center width=40% bgcolor=white cellspacing=5 cellpadding=6 >
+<table border=4 align=center width=40% bgcolor=white cellspacing=5 cellpadding=6 *ngIf="punchjsoncheck">
     <tr>
-    <td align=center>PunchStatus</td>
-    <td align=center>PunchTime</td>
+        <td align=center>PunchStatus</td>
+        <td align=center>PunchTime</td>
     </tr>
     <tr *ngFor="let pun of punchjson">
-    <td align=center>{{punchType(pun?.CheckStatus)}}</td>
-    <td >{{pun?.CheckTime}}</td>
+        <td align=center>{{punchType(pun?.CheckStatus)}}</td>
+        <td>{{pun?.CheckTime}}</td>
     </tr>
-    </table>
-    <br>
-    <div style="text-align:center;">
+</table>
+
+<table border=4 align=center width=40% bgcolor=white cellspacing=5 cellpadding=6 *ngIf="!punchjsoncheck">
+    <tr>
+        <td align=center>PunchStatus</td>
+        <td align=center>PunchTime</td>
+    </tr>
+</table>
+
+<br>
+<div style="text-align:center;">
     <br>
     <button (click)="punch()">Punch</button>
     <br>
     <br>
     <button (click)="goProfile()">Back</button>
-    </div>
+</div>

@@ -37,6 +37,7 @@ const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 
+const nowDate = new Date().getUTCFullYear()+'-'+(new Date().getMonth()+1)+'-'+ new Date().getDate();
 
 //UTC+8
 Date.prototype.addHours = function (h) {
@@ -44,9 +45,28 @@ Date.prototype.addHours = function (h) {
   return this;
 }
 
-function formatTime(h) {
-  return h.getYear() + 1900 + '-' + (parseInt(h.getMonth()) + 1) + '-' + h.getDate();
+//checkleaveTime
+function checkDateMin(leaveDate){
+  //year leaveDate>nowDate
+if(parseInt(leaveDate.slice(0,4))>parseInt(nowDate.slice(0,4))){
+ return true;
 }
+ //same year, month leaveDate>nowDate
+else if (parseInt(leaveDate.slice(0,4)) === parseInt(nowDate.slice(0,4)) && parseInt(leaveDate.slice(5,7))>parseInt(nowDate.slice(5,7)) )    
+{
+  return true;
+}
+//same year, same month, date leaveDate>nowDate
+else if (parseInt(leaveDate.slice(0,4)) === parseInt(nowDate.slice(0,4)) && parseInt(leaveDate.slice(5,7)) === parseInt(nowDate.slice(5,7)) && parseInt(leaveDate.slice(8,10)) >= parseInt(nowDate.slice(7,10)) )    
+{
+  return true;
+}
+else{
+return false;
+}
+
+}
+
 
 //trans leave
 function leavetrans(leave){
@@ -169,29 +189,34 @@ app.post('/punch', function (req, res, next) {
             //check punch status
             switch (result.length) {
               case 0:
-                await collection.insert({ id: req.body.id, CheckStatus: 1, CheckTime: new Date() });
+                await collection.insert({ id: parseInt(req.body.id), CheckStatus: 1, CheckTime: new Date() });
                 punchReturnCode.return = "punchIn";
+                punchReturnCode.returnCode = '0000';
                 res.json(punchReturnCode);
                 break;
               case 1:
-                await collection.insert({ id: req.body.id, CheckStatus: 2, CheckTime: new Date() });
+                await collection.insert({ id: parseInt(req.body.id), CheckStatus: 2, CheckTime: new Date() });
                 punchReturnCode.return = "punchOut";
+                punchReturnCode.returnCode = '0000';
                 res.json(punchReturnCode);
                 break;
               case 2:
                 punchReturnCode.return = "cannot punch this day";
+                punchReturnCode.returnCode = '0002';
                 res.json(punchReturnCode);
                 break;
               default:
                 punchReturnCode.return = "cannot punch this day";
+                punchReturnCode.returnCode = '0002';
                 res.json(punchReturnCode);
                 break;
             }
           }
         }
         else {
-          await collection.insert({ id: req.body.id, CheckStatus: 1, CheckTime: new Date() });
+          await collection.insert({ id: parseInt(req.body.id), CheckStatus: 1, CheckTime: new Date() });
           punchReturnCode.return = "punchIn";
+          punchReturnCode.returnCode = '0000';
           res.json(punchReturnCode);
         }
         client.close();
@@ -238,9 +263,15 @@ app.post('/punchRecords', function (req, res, next) {
           for(i=0;i<punchReturnCode.return.length;i++){
           punchReturnCode.return[i].CheckTime = punchReturnCode.return[i].CheckTime + '';
         }
+        punchReturnCode.returnCode = '0000';
           console.log(punchReturnCode.return.CheckTime);
           res.json(punchReturnCode);
-        } else {
+        } else if (items.length == 0) {
+          punchReturnCode.return = '0 records';
+          punchReturnCode.returnCode = '0001';
+          res.json(punchReturnCode);
+
+        }else {
           res.json(errorCode);
         }
       });
@@ -260,8 +291,10 @@ app.post('/leave', function (req, res, next) {
     assert.equal(null, err);
     console.log("Connected successfully to server");
     const db = client.db(dbName);
-
-
+    console.log('``````````````````````````````````````````````````````````')
+    console.log(checkDateMin(req.body.VacationDate))
+    console.log('``````````````````````````````````````````````````````````')
+    if(checkDateMin(req.body.VacationDate)){
     db.collection("leave",  function (err, collection) {
        collection.find({ id: parseInt(req.body.id) }).toArray( async function (err, items) {
         if (err) throw err;
@@ -274,9 +307,10 @@ app.post('/leave', function (req, res, next) {
           if (checkLeaveTimeList) {
            const result = checkLeaveTimeList.filter(time => !time.indexOf(req.body.VacationDate));
            if (result.length==0){
-            await collection.insert({ id: req.body.id, Vacation : leavetrans(parseInt(req.body.Vacation)) , VacationDate:req.body.VacationDate });
-            punchReturnCode.return = "success to advance leave";
-            res.json(punchReturnCode);
+            await collection.insert({ id: parseInt(req.body.id), Vacation : leavetrans(parseInt(req.body.Vacation)) , VacationDate:req.body.VacationDate });
+            leaveReturnCode.return = "success to advance leave";
+            leaveReturnCode.returnCode = '0000';
+            res.json(leaveReturnCode);
             }
             else if (result.length>0){
             res.json(errorCode);
@@ -284,13 +318,19 @@ app.post('/leave', function (req, res, next) {
           }
         }
         else {
-          await collection.insert({ id: req.body.id, Vacation : leavetrans(req.body.Vacation) , VacationDate:req.body.VacationDate });
-          punchReturnCode.return = "success to advance leave";
-          res.json(punchReturnCode);
+          await collection.insert({ id: parseInt(req.body.id), Vacation : leavetrans(req.body.Vacation) , VacationDate:req.body.VacationDate });
+          leaveReturnCode.return = "success to advance leave";
+          leaveReturnCode.returnCode = '0000';
+          res.json(leaveReturnCode);
         }
         client.close();
       });
     });
+
+  }else{
+res.json(errorCode);
+  }
+
     // db will close early insert 
     // client.close();
   });
@@ -333,8 +373,14 @@ app.post('/leaveRecords', function (req, res, next) {
             leaveReturnCode.return[i].CheckTime = leaveReturnCode.return[i].CheckTime + '';
         }
           console.log(leaveReturnCode.return.CheckTime);
+          leaveReturnCode.returnCode = '0000';
           res.json(leaveReturnCode);
-        } else {
+        } else if (items.length == 0) {
+          leaveReturnCode.return = '0 records';
+          leaveReturnCode.returnCode = '0001';
+          res.json(leaveReturnCode);
+
+        }else {
           res.json(errorCode);
         }
       });

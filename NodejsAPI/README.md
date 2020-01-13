@@ -6,6 +6,6 @@ Try use Node.js & mongoDB to achieve CRUD Project , simulation a Punch Systems s
 
 ## 2. npm install
 
-## 3. Node mongodb.js to create your testDB
+## 3. Node mongodb.js to create your punchSystemDB
 
 ## 4. Node server.js to create your API server in port 5001

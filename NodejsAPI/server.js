@@ -93,10 +93,147 @@ const url = 'mongodb://localhost:27017';
 const dbName = 'PunchSystems';
 
 var app = express();
+
+// swagger
+var swaggerUi = require('swagger-ui-express');
+var swaggerJSDoc = require('swagger-jsdoc');
+var swaggerDefinition = {
+  info: {
+    title: 'punchSystem Swagger API',
+    version: '1.0.0',
+    description: 'Swagger API docs',
+  },
+  host: 'localhost:5001',
+  basePath: '/',
+  
+};
+
+// options for the swagger docs
+var options = {
+  // import swaggerDefinitions
+  swaggerDefinition: swaggerDefinition,
+  // path to the API docs
+  apis: ['./server.js'],
+};
+
+// initialize swagger-jsdoc
+var swaggerSpec = swaggerJSDoc(options);
+
+// serve swagger
+app.get('/swagger.json', function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
-// Login
+    /**
+   * @swagger
+   * definitions:
+   *   error:
+   *     properties:
+   *       return:
+   *         type: string
+   *       returnCode:
+   *         type: string
+   *         example: "9999"
+   *   LoginReq:
+   *     required:
+   *       - account
+   *       - password
+   *     properties:
+   *       account:
+   *         type: string
+   *       password:
+   *         type: string
+   *   LoginRes:
+   *     properties:
+   *       return:
+   *         type: object
+   *         properties:
+   *           id:
+   *             type: string
+   *       returnCode:
+   *         type: string
+   *         example: "0000"
+   *   profile:
+   *     properties:
+   *       returnCode:
+   *         type: string
+   *       return:
+   *         type: array
+   *         object:
+   *           name: string
+   *           id: string
+   *   MemberProfileReq:
+   *     required:
+   *       - id
+   *     properties:
+   *       id:
+   *         type: string
+   *   MemberProfileRes:
+   *     properties:
+   *       return:
+   *         type: object
+   *         properties:
+   *           _id:
+   *             type: string
+   *           id:
+   *             type: string
+   *           name:
+   *             type: string
+   *           sex:
+   *             type: string
+   *           personId:
+   *             type: string
+   *           birthDate:
+   *             type: string
+   *           phone:
+   *             type: string
+   *           position:
+   *             type: string
+   *           department:
+   *             type: string
+   *       returnCode:
+   *         type: string
+   *         example: "0000"
+   */
+
+
+
+  /**
+   * @swagger
+   * /login:
+   *   post:
+   *     description: Login to the application
+   *     tags: [Login]
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: body
+   *         description: User's name & password(md5 hased).
+   *         in: body
+   *         required: true
+   *         schema:
+   *           $ref: '#/definitions/LoginReq'
+   *           type: object
+   *     responses:
+   *       0000:
+   *         description: return this user id
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/LoginRes'
+   *       9999:
+   *         description: return this user id
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/error'
+   */
+ //login
 app.post('/login', function (req, res, next) {
   console.log('POST ' + apiDomain + '/login');
   console.log(req);
@@ -129,6 +266,36 @@ app.post('/login', function (req, res, next) {
 
 });
 
+
+
+ /**
+   * @swagger
+   * /profiLe:
+   *   post:
+   *     description: work Member profile
+   *     tags: [MemberProfile]
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: body
+   *         description: User's id (get from login API)
+   *         in: body
+   *         required: true
+   *         schema:
+   *           $ref: '#/definitions/MemberProfileReq'
+   *           type: object
+   *     responses:
+   *       0000:
+   *         description: return member profile from id search
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/MemberProfileRes'
+   *       9999:
+   *         description: return member profile from id search
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/error'
+   */
 // MemberProfile
 app.post('/profiLe', function (req, res, next) {
   console.log('POST ' + apiDomain + '/profiLe');

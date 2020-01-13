@@ -5,7 +5,7 @@ const assert = require('assert');
   const url = 'mongodb://localhost:27017';
   // Database Name
   const dbName = 'PunchSystems';
-
+  const md5 = require('md5');
 
 
 // leaveData mongo~
@@ -37,10 +37,12 @@ MongoClient.connect(url, function(err, client) {
   console.log("Connected successfully to server");
   const db = client.db(dbName);
 
+  //md5 hashed password
+  const pwd = md5('123456');
   db.collection('accounts',function(err,collection){
-    collection.insert({ id:1, account:'Steve', password:'123456' });
-    collection.insert({ id:2, account:'Bill', password:'123456' });
-    collection.insert({ id:3, account:'James', password:'123456' });
+    collection.insert({ id:1, account:'Steve', password: pwd });
+    collection.insert({ id:2, account:'Bill', password: pwd });
+    collection.insert({ id:3, account:'James', password: pwd });
  
     collection.count(function(err,count){
         if(err) throw err;

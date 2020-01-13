@@ -36,6 +36,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+const md5 = require('md5');
 
 const nowDate = new Date().getUTCFullYear()+'-'+(new Date().getMonth()+1)+'-'+ new Date().getDate();
 
@@ -113,7 +114,7 @@ app.post('/login', function (req, res, next) {
 
         if (!items.length == 0) {
           returnCode.id = items[0].id;
-          if (items[0].account == req.body.account && items[0].password == req.body.password) {
+          if (items[0].account == req.body.account && md5(items[0].password) == req.body.password) {
             res.json(returnCode);
           } else {
             res.json(errorCode);

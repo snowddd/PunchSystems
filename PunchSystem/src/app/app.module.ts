@@ -9,6 +9,7 @@ import { PunchinComponent } from './punchin/punchin.component';
 import { LeaveComponent } from './leave/leave.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms'
+import { Md5 } from 'ts-md5/dist/md5';
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,7 @@ import { FormsModule } from '@angular/forms'
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [Md5],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

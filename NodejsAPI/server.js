@@ -148,33 +148,28 @@ app.use(bodyParser.json());
    *     properties:
    *       account:
    *         type: string
+   *         example: Bill
    *       password:
    *         type: string
+   *         example: e10adc3949ba59abbe56e057f20f883e
    *   LoginRes:
    *     properties:
    *       return:
    *         type: object
    *         properties:
    *           id:
-   *             type: string
+   *             type: number
+   *             example: 2
    *       returnCode:
    *         type: string
    *         example: "0000"
-   *   profile:
-   *     properties:
-   *       returnCode:
-   *         type: string
-   *       return:
-   *         type: array
-   *         object:
-   *           name: string
-   *           id: string
-   *   MemberProfileReq:
+   *   idReq:
    *     required:
    *       - id
    *     properties:
    *       id:
    *         type: string
+   *         example: "2"
    *   MemberProfileRes:
    *     properties:
    *       return:
@@ -201,6 +196,117 @@ app.use(bodyParser.json());
    *       returnCode:
    *         type: string
    *         example: "0000"
+   *   punchRes:
+   *     properties:
+   *       return:
+   *         type: string
+   *         example: "punchIn"
+   *       returnCode:
+   *         type: string
+   *         example: "0000"
+   *   punchRecordRes:
+   *     properties:
+   *       returnCode:
+   *         type: string
+   *         example: "0000"
+   *       return:
+   *         type: array
+   *         items:
+   *           $ref: '#/definitions/punchRecord'
+   *         example:
+   *           - _id: "5e17f587605fad3310646291"
+   *             id: 1
+   *             CheckStatus: 1
+   *             CheckTime: "Fri Jan 10 2020 11:54:47 GMT+0800 (GMT+08:00)"
+   *           - _id: "5e17f589605fad3310646292"
+   *             id: 1
+   *             CheckStatus: 2
+   *             CheckTime: "Fri Jan 10 2020 11:54:49 GMT+0800 (GMT+08:00)"
+   *           - _id: "5e1d7d08f7dda03ea88a8779"
+   *             id: 1
+   *             CheckStatus: 1
+   *             CheckTime: "Tue Jan 14 2020 16:34:16 GMT+0800 (GMT+08:00)"
+   *           - _id: "5e1d7ee4d881b839b424579d"
+   *             id: 1
+   *             CheckStatus: 2
+   *             CheckTime: "Tue Jan 14 2020 16:42:12 GMT+0800 (GMT+08:00)"
+   *   punchRecord:
+   *     type: object
+   *     properties:
+   *       _id:
+   *         type: string
+   *       id:
+   *         type: number
+   *         example: 2
+   *       CheckStatus:
+   *         type: number
+   *         example: 1
+   *       CheckTime:
+   *         type: string
+   *         example: "Fri Jan 10 2020 11:54:47 GMT+0800 (GMT+08:00)"
+   *   LeaveReq:
+   *     required:
+   *       - id
+   *       - Vacation
+   *       - VactionDate
+   *     properties:
+   *       id:
+   *         type: number
+   *         example: 2
+   *       Vacation:
+   *         type: string
+   *         example: "4"
+   *       VactionDate:
+   *         type: string
+   *         example: "2020-03-05"
+   *   leaveRes:
+   *     properties:
+   *       return:
+   *         type: string
+   *         example: "success to advance leave"
+   *       returnCode:
+   *         type: string
+   *         example: "0000"
+   *   leaveRecord:
+   *     type: object
+   *     properties:
+   *       _id:
+   *         type: string
+   *       id:
+   *         type: number
+   *         example: 2
+   *       Vacation:
+   *         type: string
+   *         example: "Annual Leave"
+   *       VacationDate:
+   *         type: string
+   *         example: "2020-01-15"
+   *   leaveRecordRes:
+   *     properties:
+   *       returnCode:
+   *         type: string
+   *         example: "0000"
+   *       return:
+   *         type: array
+   *         items:
+   *           $ref: '#/definitions/leaveRecord'
+   *         example:
+   *           - _id: "5e17f587605fad3310646291"
+   *             id: 2
+   *             Vacation: "Leave for Statutory Reasons"
+   *             VacationDate: "2020-01-15"
+   *           - _id: "5e17f589605fad3310646292"
+   *             id: 2
+   *             Vacation: "Annual Leave"
+   *             VacationDate: "2020-02-17"
+   *           - _id: "5e1d7d08f7dda03ea88a8779"
+   *             id: 2
+   *             Vacation: "Personal Leave"
+   *             VacationDate: "2020-03-21"
+   *           - _id: "5e1d7ee4d881b839b424579d"
+   *             id: 2
+   *             Vacation: "Personal Leave"
+   *             VacationDate: "2020-05-15"
    */
 
 
@@ -228,7 +334,7 @@ app.use(bodyParser.json());
    *           type: object
    *           $ref: '#/definitions/LoginRes'
    *       9999:
-   *         description: return this user id
+   *         description: return error message
    *         schema:
    *           type: object
    *           $ref: '#/definitions/error'
@@ -282,7 +388,7 @@ app.post('/login', function (req, res, next) {
    *         in: body
    *         required: true
    *         schema:
-   *           $ref: '#/definitions/MemberProfileReq'
+   *           $ref: '#/definitions/idReq'
    *           type: object
    *     responses:
    *       0000:
@@ -291,7 +397,7 @@ app.post('/login', function (req, res, next) {
    *           type: object
    *           $ref: '#/definitions/MemberProfileRes'
    *       9999:
-   *         description: return member profile from id search
+   *         description: return error message
    *         schema:
    *           type: object
    *           $ref: '#/definitions/error'
@@ -324,6 +430,37 @@ app.post('/profiLe', function (req, res, next) {
 
 });
 
+
+
+
+ /**
+   * @swagger
+   * /punch:
+   *   post:
+   *     description: user punch api
+   *     tags: [Punch]
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: body
+   *         description: User's id (get from login API)
+   *         in: body
+   *         required: true
+   *         schema:
+   *           $ref: '#/definitions/idReq'
+   *           type: object
+   *     responses:
+   *       0000:
+   *         description: return you are punchIn = "1" or PunchOut = "2" now
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/punchRes'
+   *       9999:
+   *         description: return error message
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/error'
+   */
 // Punch
 app.post('/punch', function (req, res, next) {
   console.log('POST ' + apiDomain + '/punch');
@@ -396,6 +533,34 @@ app.post('/punch', function (req, res, next) {
 });
 
 
+ /**
+   * @swagger
+   * /punchRecords:
+   *   post:
+   *     description: user punch 50 records
+   *     tags: [Punch]
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: body
+   *         description: User's id (get from login API)
+   *         in: body
+   *         required: true
+   *         schema:
+   *           $ref: '#/definitions/idReq'
+   *           type: object
+   *     responses:
+   *       0000:
+   *         description: return user punch time and status in 50 records
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/punchRecordRes'
+   *       9999:
+   *         description: return error message
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/error'
+   */
 // recent 50 punch records
 app.post('/punchRecords', function (req, res, next) {
   console.log('POST ' + apiDomain + '/punchRecords');
@@ -450,6 +615,34 @@ app.post('/punchRecords', function (req, res, next) {
 });
 
 
+ /**
+   * @swagger
+   * /leave:
+   *   post:
+   *     description: user punch api
+   *     tags: [Leave]
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: body
+   *         description: User's id (get from login API) & Vacation type and VacationDate(choose in select)
+   *         in: body
+   *         required: true
+   *         schema:
+   *           $ref: '#/definitions/LeaveReq'
+   *           type: object
+   *     responses:
+   *       0000:
+   *         description: return leave success message
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/leaveRes'
+   *       9999:
+   *         description: return error message
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/error'
+   */
 //Leave 
 app.post('/leave', function (req, res, next) {
   console.log('POST ' + apiDomain + '/leave');
@@ -505,6 +698,34 @@ res.json(errorCode);
 });
 
 
+ /**
+   * @swagger
+   * /leaveRecords:
+   *   post:
+   *     description: user punch api
+   *     tags: [Leave]
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - name: body
+   *         description: User's id (get from login API)
+   *         in: body
+   *         required: true
+   *         schema:
+   *           $ref: '#/definitions/idReq'
+   *           type: object
+   *     responses:
+   *       0000:
+   *         description: return user 15 vacation date and type 
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/leaveRecordRes'
+   *       9999:
+   *         description: return error message
+   *         schema:
+   *           type: object
+   *           $ref: '#/definitions/error'
+   */
 // recent 15 leave records
 app.post('/leaveRecords', function (req, res, next) {
   console.log('POST ' + apiDomain + '/leaveRecords');
@@ -536,10 +757,10 @@ app.post('/leaveRecords', function (req, res, next) {
           }
           leaveReturnCode.return = recent50Array;
           // trans date
-          for(i=0;i<leaveReturnCode.return.length;i++){
-            leaveReturnCode.return[i].CheckTime = leaveReturnCode.return[i].CheckTime + '';
-        }
-          console.log(leaveReturnCode.return.CheckTime);
+        //   for(i=0;i<leaveReturnCode.return.length;i++){
+        //     leaveReturnCode.return[i].CheckTime = leaveReturnCode.return[i].CheckTime + '';
+        // }
+        //   console.log(leaveReturnCode.return.CheckTime);
           leaveReturnCode.returnCode = '0000';
           res.json(leaveReturnCode);
         } else if (items.length == 0) {

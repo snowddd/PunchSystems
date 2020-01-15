@@ -1,13 +1,6 @@
-
-
-const apiDomain = 'http://localhost:5000';
 const assert = require('assert');
 const MongoClient = require('mongodb').MongoClient;
-// Connection URL
-const url = 'mongodb://localhost:27017';
-// Database Name
-const dbName = 'PunchSystems';
-
+const mongodbConfig = require('../config/mongodbConfig');
 
 
 /**
@@ -94,12 +87,12 @@ const dbName = 'PunchSystems';
 module.exports = app => {
   // MemberProfile
   app.post('/profiLe', function (req, res, next) {
-    console.log('POST ' + apiDomain + '/profiLe');
+    console.log('POST ' + mongodbConfig.apiDomain + '/profiLe');
     console.log(req);
-    MongoClient.connect(url, function (err, client) {
+    MongoClient.connect(mongodbConfig.url, function (err, client) {
       assert.equal(null, err);
       console.log("Connected successfully to server");
-      const db = client.db(dbName);
+      const db = client.db(mongodbConfig.dbName);
 
       db.collection("employee", function (err, collection) {
         collection.find({ id: parseInt(req.body.id) }).toArray(function (err, items) {

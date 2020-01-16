@@ -23,6 +23,7 @@ export class LeaveComponent implements OnInit {
   }
 
   leave() {
+    if(this.leaveType && this.leaveDate ){
     this.data = { "id": localStorage.getItem('id'), "Vacation": this.leaveType, "VacationDate": this.leaveDate }
     if (this.factory.checkDateMin(this.leaveDate)) {
       this.factory.sendRequest('leave', this.data).subscribe(
@@ -40,7 +41,9 @@ export class LeaveComponent implements OnInit {
     } else {
       alert('leave fail , Check your date choose');
     }
-
+  } else if(!this.leaveType || !this.leaveDate){
+     alert('check your leave choose , cant be null')
+  }
 
   }
 

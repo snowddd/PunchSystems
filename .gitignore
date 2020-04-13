@@ -45,3 +45,9 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+PunchSystem/.firebase/hosting.ZGlzdA.cache
+PunchSystem/.firebase/hosting.ZGlzdFxQdW5jaFN5c3RlbQ.cache
+PunchSystem/.gcloudignore
+PunchSystem/.firebaserc
+PunchSystem/firebase.json
+NodejsAPI/.gcloudignore
